@@ -22,8 +22,8 @@
             },
             '.': function (pointer, memory)
             {
-                //console.log(String.fromCharCode(parseInt(memory[pointer])));
-                console.log(memory[pointer]);
+                console.log(String.fromCharCode(parseInt(memory[pointer] << 3)));
+                //console.log((memory[pointer]));
                 return pointer;
             },
             ',': function (pointer, memory)
@@ -32,18 +32,18 @@
                 memory[pointer] = input;
                 return pointer;
             },
-            '[': function (pointer, memory, inst, program)
+            ']': function (pointer, memory, inst, program)
             {
                 var newInst = 0;
                 if (memory[pointer] == 0)
                 {
                     // Jump to after ']'
                     newInst = program.indexOf(']', inst) + 1;
-                    brainfuck.commands[program[newInst]](pointer, memory, inst, program);
+                    pointer = brainfuck.commands[program[newInst]](pointer, memory, inst, program);
                 }
                 return pointer;
             },
-            ']': function (pointer, memory, inst, program)
+            '[': function (pointer, memory, inst, program)
             {
                 var newInst = 0;
                 if (memory[pointer] != 0)
@@ -54,16 +54,15 @@
                     for (char in loop)
                     {
                         if (typeof brainfuck.commands[loop[char]] === 'function')
-                            brainfuck.commands[loop[char]](pointer, memory, inst, program);
+                           pointer = brainfuck.commands[loop[char]](pointer, memory, inst, program);
                     }
                 }
-
                 return pointer;
             }
         },
         init: function ()
         {
-            return new Array(30001).join(0).split('');
+            return new Int8Array(new ArrayBuffer(30000));
         },
         exec: function (program)
         {
