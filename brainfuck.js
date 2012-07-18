@@ -1,8 +1,7 @@
-﻿var memory = new Int8Array(new ArrayBuffer(30000));
+var memory = new Int8Array(new ArrayBuffer(30000));
 var pointer = 0;
-var loopPointer = 0;
 var program = "";
-var inLoop = 0;
+
 
 function exec(program)
 {
@@ -72,8 +71,7 @@ function exec(program)
                             forward++;
                     }
                     char = program.lastIndexOf('[', closeChar);
-                }
-                    
+                }  
                 break;
         }
     }
