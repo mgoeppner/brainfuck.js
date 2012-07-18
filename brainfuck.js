@@ -31,11 +31,49 @@ function exec(program)
                 break;
             case "[":
                 if (memory[pointer] == 0)
-                    char = program.indexOf(']', char);
+                {
+                    var matched = 1;
+                    var forward = 1;
+                    var closeChar = 0;
+                    while (matched != 0)
+                    {
+                        if (program[char + forward] === '[')
+                            matched++;
+
+                        else if (program[char + forward] === ']')
+                            matched--;
+
+                        if (matched === 0)
+                            closeChar = char + forward;
+                        else
+                            forward++;
+                    }
+                    char = program.indexOf(']', closeChar);
+                }
                 break;
             case "]":
                 if (memory[pointer] != 0)
-                    char = program.lastIndexOf('[', char);
+                {
+                    var matched = 1;
+                    var forward = 1;
+                    var closeChar = 0;
+
+                    while (matched != 0)
+                    {
+                        if (program[char - forward] === ']')
+                            matched++;
+
+                        else if (program[char - forward] === '[')
+                            matched--;
+
+                        if (matched === 0)
+                            closeChar = char - forward;
+                        else
+                            forward++;
+                    }
+                    char = program.lastIndexOf('[', closeChar);
+                }
+                    
                 break;
         }
     }
