@@ -1,80 +1,81 @@
-var memory = new Int8Array(new ArrayBuffer(30000));
-var pointer = 0;
-var program = "";
-
-
-function exec(program)
+var brainfuck = function()
 {
-    for (char = 0; char < program.length; char++)
-    {
-        switch (program[char])
+    return {
+        exec : function(program)
         {
-            case ">":
-                pointer++;
-                break;
-            case "<":
-                pointer--;
-                break;
-            case "+":
-                memory[pointer]++;
-                break;
-            case "-":
-                memory[pointer]--;
-                break;
-            case ".":
-                console.log(String.fromCharCode(memory[pointer]));
-                break;
-            case ",":
-                var input = prompt("Enter a character:").charCodeAt(0);
-                memory[pointer] = input;
-                break;
-            case "[":
-                if (memory[pointer] == 0)
+            var memory = new Int8Array(new ArrayBuffer(30000));
+            var pointer = 0;
+            
+            for (char = 0; char < program.length; char++)
+            {
+                switch (program[char])
                 {
-                    var matched = 1;
-                    var forward = 1;
-                    var closeChar = 0;
-                    while (matched != 0)
-                    {
-                        if (program[char + forward] === '[')
-                            matched++;
-
-                        else if (program[char + forward] === ']')
-                            matched--;
-
-                        if (matched === 0)
-                            closeChar = char + forward;
-                        else
-                            forward++;
-                    }
-                    char = program.indexOf(']', closeChar);
+                    case ">":
+                        pointer++;
+                        break;
+                    case "<":
+                        pointer--;
+                        break;
+                    case "+":
+                        memory[pointer]++;
+                        break;
+                    case "-":
+                        memory[pointer]--;
+                        break;
+                    case ".":
+                        console.log(String.fromCharCode(memory[pointer]));
+                        break;
+                    case ",":
+                        var input = prompt("Enter a character:").charCodeAt(0);
+                        memory[pointer] = input;
+                        break;
+                    case "[":
+                        if (memory[pointer] == 0)
+                        {
+                            var matched = 1;
+                            var forward = 1;
+                            var closeChar = 0;
+                            while (matched != 0)
+                            {
+                                if (program[char + forward] === '[')
+                                    matched++;
+        
+                                else if (program[char + forward] === ']')
+                                    matched--;
+        
+                                if (matched === 0)
+                                    closeChar = char + forward;
+                                else
+                                    forward++;
+                            }
+                            char = program.indexOf(']', closeChar);
+                        }
+                        break;
+                    case "]":
+                        if (memory[pointer] != 0)
+                        {
+                            var matched = 1;
+                            var forward = 1;
+                            var closeChar = 0;
+        
+                            while (matched != 0)
+                            {
+                                if (program[char - forward] === ']')
+                                    matched++;
+        
+                                else if (program[char - forward] === '[')
+                                    matched--;
+        
+                                if (matched === 0)
+                                    closeChar = char - forward;
+                                else
+                                    forward++;
+                            }
+                            char = program.lastIndexOf('[', closeChar);
+                        }  
+                        break;
                 }
-                break;
-            case "]":
-                if (memory[pointer] != 0)
-                {
-                    var matched = 1;
-                    var forward = 1;
-                    var closeChar = 0;
-
-                    while (matched != 0)
-                    {
-                        if (program[char - forward] === ']')
-                            matched++;
-
-                        else if (program[char - forward] === '[')
-                            matched--;
-
-                        if (matched === 0)
-                            closeChar = char - forward;
-                        else
-                            forward++;
-                    }
-                    char = program.lastIndexOf('[', closeChar);
-                }  
-                break;
+            }
         }
-    }
-}
-
-exec(program);
+    }    
+}();
