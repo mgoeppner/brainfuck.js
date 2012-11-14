@@ -6,7 +6,7 @@ var brainfuck = function()
             var memory = new Int8Array(new ArrayBuffer(30000));
             var pointer = 0;
             
-            for (char = 0; char < program.length; char++)
+            for (var char = 0; char < program.length; char++)
             {
                 switch (program[char])
                 {
